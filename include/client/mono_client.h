@@ -9,7 +9,7 @@ extern volatile bool client_killswitch;
 #include "struct_transfer.h"
 #include "client_transfer.h"
 #include <stdarg.h>
-#include "util.h"
+#include "utils.h"
 #include "client.h"
 #include "packet.h"
 #include "client_utils.h"

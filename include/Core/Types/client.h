@@ -1,6 +1,7 @@
 #ifndef CLIENT_H
 #define CLIENT_H
 
+#include <signal.h>
 #include "client_ctx.h"
 #include "list.h"
 #include <netinet/in.h>

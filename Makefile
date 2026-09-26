@@ -1,10 +1,6 @@
 CC = gcc
-CFLAGS = -Wall -Wextra -O2 -Iinclude -Iinclude/Core -Iinclude/Core/Client -Iinclude/Core/Server \
--Iinclude/Utils -Iinclude/Core/Network -Iinclude/Security -Iinclude/Types -Iinclude/tests -I/usr/include/openssl
 
 OPENSSL = $(shell brew --prefix openssl@3)
-
-
 
 CFLAGS= -Wall -Wextra -O2 -Iinclude -Iinclude/Core -Iinclude/Core/Types \
 	       -Iinclude/Core/Utils -I$(OPENSSL)/include \
@@ -30,14 +26,14 @@ server: $(SERVER)
 all: client server
 
 $(CLIENT): $(OBJ_CLIENT)
-	$(CC) $(CLFLAGS_CLIENT) -g -o $@ $^ $(LDFLAGS)
+	$(CC) -g -o $@ $^ $(LDFLAGS)
 
 client_build/%.o: src/%.c 
 	mkdir -p $(dir $@)
 	$(CC) $(CFLAGS_CLIENT) -g -c $< -o $@
 
 $(SERVER): $(OBJ_SERVER)
-	$(CC) $(CFLAGS_SERVER) -g -o $@ $^ $(LDFLAGS)
+	$(CC) -g -o $@ $^ $(LDFLAGS)
 
 server_build/%.o: src/%.c
 	mkdir -p $(dir $@)
