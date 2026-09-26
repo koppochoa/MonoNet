@@ -1,6 +1,17 @@
 #ifndef SERVER_THREADS_H
 #define SERVER_THREADS_H
 
+#include "server.h"
+#include "commands.h"
+#include "request.h"
+#include "message.h"
+#include "client.h"
+#include <stdbool.h>
+#include <time.h>
+#include "packet.h"
+#include "mono_server.h"
+#include <sys/socket.h>
+
 struct RegisterClientArgs
 {
     int*    fd;

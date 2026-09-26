@@ -1,4 +1,4 @@
-#include "chat.h"
+#include "server_manager.h"
 
 int* ref_server_socket;
 bool* ref_pause_th_rc, ref_pause_th_bm, ref_pause_th_rfc;

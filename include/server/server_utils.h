@@ -1,6 +1,7 @@
 #ifndef SERVER_UTILS_H
 #define SERVER_UTILS_H
 
+#include <sys/epoll.h>
 #include <arpa/inet.h>
 #include <unistd.h>
 #include "client.h"

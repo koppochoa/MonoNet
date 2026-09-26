@@ -1,4 +1,4 @@
-#include "chat.h"
+#include "server.h"
 
 // Main Server Variables
 int                 server_fd;              // Server file descriptor
@@ -33,7 +33,7 @@ socklen_t           addr_size;                          // Address size
 volatile bool app_killswitch = false;
 
 //* Main Server Method
-void CreateServer(void* args)
+void runServer(void* args)
 {
     signal(SIGINT, handle_server_closing);
 
