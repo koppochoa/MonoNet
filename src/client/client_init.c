@@ -28,11 +28,14 @@ void InitClientSocket(int *client_fd, struct sockaddr_in *addr, int port,
   addr->sin_family = AF_INET;
   addr->sin_port = htons(port);
 
+  printf("pton-ing...\n");
+
   if (inet_pton(AF_INET, ip, &addr->sin_addr) <= 0) {
     perror("inet_pton");
     exit(1);
 }
 
+printf("connecting...\n");
   // Connect
   if (connect(*client_fd, (struct sockaddr *)addr, sizeof(*addr)) < 0) {
     perror("Error while connecting");

@@ -1,6 +1,6 @@
 #include "mono_client.h"
 
-#define CLIENT_PORT     8080
+#define CLIENT_PORT     8081
 #define SERVER_IP       "192.168.1.154"
 
 // Main Client Variables
