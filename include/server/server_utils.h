@@ -1,7 +1,14 @@
 #ifndef SERVER_UTILS_H
 #define SERVER_UTILS_H
 
-
+#include <arpa/inet.h>
+#include <unistd.h>
+#include "client.h"
+#include "network.h"
+#include "utils.h"
+#include <stdio.h>
+#include <stdarg.h>
+#include <sys/socket.h>
 
 void CloseServer(int *fd, bool *stop_switch);
 

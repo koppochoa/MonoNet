@@ -1,4 +1,5 @@
-#include "chat.h"
+#include "server_utils.h"
+
 
 // Ferme le serveur | WIN/UNIX
 void CloseServer(int *fd, bool *stop_switch)
@@ -36,7 +37,7 @@ void DisplayServerInfos(struct sockaddr_in* server_addr, int port)
     char server_ip[INET_ADDRSTRLEN];
     inet_ntop(AF_INET, &server_addr->sin_addr, server_ip, INET_ADDRSTRLEN);
 
-    log_client(WARNING, "Server Connection Infos");
+    log_server(WARNING, "Server Connection Infos");
     ColorPrint(COLOR_CYAN, "IP              ");printf("%s\n", server_ip);
     ColorPrint(COLOR_CYAN, "PORT            ");printf("%d\n", port);
 }
