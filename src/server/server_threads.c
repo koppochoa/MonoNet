@@ -1,4 +1,4 @@
-#include "chat.h"
+#include "server_threads.h"
 
 /**
  * Entry point for the Registering Thread
