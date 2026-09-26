@@ -835,3 +835,5 @@ valgrind_server.txt
 mono_client
 mono_server
 .DS_Store
+client_build/
+server_build/

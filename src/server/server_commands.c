@@ -1,4 +1,4 @@
-#include "chat.h"
+#include "server_commands.h"
 
 /**
  * Call this func to add a message to the ciphered queue

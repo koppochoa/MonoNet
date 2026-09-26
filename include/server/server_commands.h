@@ -1,6 +1,10 @@
 #ifndef SERVER_COMMANDS_H
 #define SERVER_COMMANDS_H
 
+#include "client.h"
+#include <openssl/aes.h>
+#include <time.h>
+
 void SRV_add_message_to_queue(struct Queue* packets_queue, unsigned char* packet);
 
 void SRV_CMD_send_packet_to_client(Client* client, unsigned char packet[255][sizeof(Packet) + AES_BLOCK_SIZE], uint8_t* packets_count, uint8_t* type, struct tm* time);
