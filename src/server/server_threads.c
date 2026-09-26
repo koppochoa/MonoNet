@@ -39,6 +39,7 @@ void* RegisterClient(void* args)
 
     while (!app_killswitch)
     {
+	    printf("loop on ?");
         while(*pause_switch){}
 
         struct sockaddr_in addr;

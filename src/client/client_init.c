@@ -1,4 +1,4 @@
-#include "mono_client.h"
+#include "client_init.h"
 
 /**
  * Call this func to init ursefl
@@ -21,17 +21,26 @@ void InitClientSocket(int *client_fd, struct sockaddr_in *addr, int port,
     perror("Error while creating socket");
     exit(1);
   }
+  
+  memset(addr, 0, sizeof(*addr));
 
   // Configure Server Addr
   addr->sin_family = AF_INET;
   addr->sin_port = htons(port);
-  inet_pton(AF_INET, ip, &(addr->sin_addr));
+
+  if (inet_pton(AF_INET, ip, &addr->sin_addr) <= 0) {
+    perror("inet_pton");
+    exit(1);
+}
 
   // Connect
   if (connect(*client_fd, (struct sockaddr *)addr, sizeof(*addr)) < 0) {
     perror("Error while connecting");
     exit(1);
   }
+
+  printf("Successfully Connected to : %s\n", ip);
+
 }
 
 void HandleClientExit() {

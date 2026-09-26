@@ -1,4 +1,4 @@
-#include "mono_client.h"
+#include "client_utils.h"
 
 // Affiche des information client
 void log_client(enum DEBUG_TYPE type, char* format, ...)
@@ -30,7 +30,7 @@ void diplay_infos_client(Client* client, unsigned int port)
     log_client(INFO, "Welcome to No-Fly, you are actually initiating Client behaviour");
 
     char server_ip[INET_ADDRSTRLEN];
-    inet_ntop(AF_INET, &client->addr, server_ip, INET_ADDRSTRLEN);
+    inet_ntop(AF_INET, &client->addr.sin_addr, server_ip, INET_ADDRSTRLEN);
     
     log_client(WARNING, "Client Connection Infos");
     ColorPrint(COLOR_CYAN, "IP              ");printf("%s\n", server_ip);

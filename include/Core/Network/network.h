@@ -3,7 +3,9 @@
 #include <stdio.h>
 #include <stdint.h>
 #include <sys/socket.h>
+#include <arpa/inet.h>
 #include <fcntl.h>
+
 
 #include "struct_transfer.h"
 #include "data_transfer.h"
