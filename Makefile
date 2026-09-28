@@ -2,7 +2,7 @@ CC = gcc
 
 OPENSSL = $(shell brew --prefix openssl@3)
 
-CFLAGS= -Wall -Wextra -O2 -Iinclude -Iinclude/Core -Iinclude/Core/Types \
+CFLAGS= -Wall -g -Wextra -Iinclude -Iinclude/Core -Iinclude/Core/Types \
 	       -Iinclude/Core/Utils -I$(OPENSSL)/include \
 	       -Iinclude/Core/Network -Iinclude/Core/Security
 

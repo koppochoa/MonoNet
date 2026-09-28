@@ -1,53 +1,46 @@
 #include "network.h"
 
 // Send Data
-int send_data(int* fd, const unsigned char* data, unsigned int len)
-{
-    unsigned int total_sent = 0;
-    //log_server(INFO, "Sending %u", len);
-    while(total_sent < len)
-    {
-        int sent = send(*fd, data + total_sent, len - total_sent, 0);
-        if(sent < 0)
-        {
-            perror("Error while sending data");
-            return -1;
-        }
-        total_sent += sent;
+int send_data(int *fd, const unsigned char *data, unsigned int len) {
+  unsigned int total_sent = 0;
+  // log_server(INFO, "Sending %u", len);
+  while (total_sent < len) {
+    int sent = send(*fd, data + total_sent, len - total_sent, 0);
+    if (sent < 0) {
+      perror("Error while sending data");
+      return -1;
     }
+    total_sent += sent;
+  }
 
-    return total_sent;
+  return total_sent;
 }
 
-int async_receive_data(int* fd, unsigned char* output, size_t* len)
-{
-    size_t total_received = 0;
-    while(total_received < *len)
-    {
-        int received = recv(*fd, output + total_received, *len - total_received, 0);
-        if(received < 0)
-        {
-            if (errno == EAGAIN || errno == EWOULDBLOCK)
-                break; // On a lu tout ce qui était dispo
-            perror("recv");
-            return 0;
-        }
-        else if (received == 0)
-        {
-            // Connexion fermée proprement par le client
-            return -1;
-        }
-        total_received += received;
+int async_receive_data(int *fd, unsigned char *output, size_t *len) {
+  size_t total_received = 0;
+  while (total_received < *len) {
+    int received = recv(*fd, output + total_received, *len - total_received, 0);
+    if (received < 0) {
+      if (errno == EAGAIN || errno == EWOULDBLOCK)
+        break; // On a lu tout ce qui était dispo
+      // perror("recv");
+      return 0;
+    } else if (received == 0) {
+      // Connexion fermée proprement par le client
+      return -1;
     }
+    total_received += received;
+  }
 
-    return total_received;
+  return total_received;
 }
 
-// int async_receive_data_partial(int* fd, unsigned char* output, size_t total_size, size_t already_received) {
+// int async_receive_data_partial(int* fd, unsigned char* output, size_t
+// total_size, size_t already_received) {
 //     size_t total_received = already_received;
 //     while (total_received < total_size) {
-//         int received = recv(*fd, output + total_received, total_size - total_received, 0);
-//         if (received < 0) {
+//         int received = recv(*fd, output + total_received, total_size -
+//         total_received, 0); if (received < 0) {
 //             if (errno == EAGAIN || errno == EWOULDBLOCK)
 //                 break;
 //             perror("recv");
@@ -57,50 +50,57 @@ int async_receive_data(int* fd, unsigned char* output, size_t* len)
 //             return -1;
 //         total_received += received;
 //     }
-//     return total_received - already_received; // retourne ce qu'on a reçu en plus
+//     return total_received - already_received; // retourne ce qu'on a reçu en
+//     plus
 // }
 
+int async_receive_data_partial(int *fd, unsigned char *output,
+                               size_t total_size, size_t already_received,
+                               int *errcode) {
+  size_t total_received = already_received;
 
-int async_receive_data_partial(int* fd, unsigned char* output, size_t total_size, size_t already_received, int* errcode) {
-    size_t total_received = already_received;
+  // log_server(ALERT,"RECEIVING FOR:   %ld", total_received);
 
-    //log_server(ALERT,"RECEIVING FOR:   %ld", total_received);
+  while (total_received < total_size) {
+    ssize_t received =
+        recv(*fd, output + total_received, total_size - total_received, 0);
+    // log_server(ALERT,"READ:   %ld", received);
 
-
-    while (total_received < total_size) {
-        ssize_t received = recv(*fd, output + total_received, total_size - total_received, 0);
-        //log_server(ALERT,"READ:   %ld", received);
-
-        if (received < 0) {
-            if (errno == EAGAIN || errno == EWOULDBLOCK) {
-                if (errcode) *errcode = errno;
-                return 0; // Rien à lire maintenant, pas une erreur grave
-            }
-            fprintf(stderr, "recv() failed: %s\n", strerror(errno));
-            if (errcode) *errcode = errno;
-            return -1;
-        }
-
-        if (received == 0) {
-            fprintf(stderr, "Connection closed by peer\n");
-            if (errcode) *errcode = 0;
-            return -1;
-        }
-
-        total_received += received;
+    if (received < 0) {
+      if (errno == EAGAIN || errno == EWOULDBLOCK) {
+        if (errcode)
+          *errcode = errno;
+        return 0; // Rien à lire maintenant, pas une erreur grave
+      }
+      fprintf(stderr, "recv() failed: %s\n", strerror(errno));
+      if (errcode)
+        *errcode = errno;
+      return -1;
     }
-    //log_server(ALERT,"OUT WITH : %ld", total_received - already_received);
 
-    if (errcode) *errcode = 0; // aucune erreur
-    return total_received - already_received;
+    if (received == 0) {
+      fprintf(stderr, "Connection closed by peer\n");
+      if (errcode)
+        *errcode = 0;
+      return -1;
+    }
+
+    total_received += received;
+  }
+  // log_server(ALERT,"OUT WITH : %ld", total_received - already_received);
+
+  if (errcode)
+    *errcode = 0; // aucune erreur
+  return total_received - already_received;
 }
 
-
-// int async_receive_data_partial(int* fd, void* buffer, size_t target_len, size_t already_received) {
+// int async_receive_data_partial(int* fd, void* buffer, size_t target_len,
+// size_t already_received) {
 //     size_t total_received = already_received;
 
 //     while (total_received < target_len) {
-//         int received = recv(*fd, ((uint8_t*)buffer) + total_received, target_len - total_received, 0);
+//         int received = recv(*fd, ((uint8_t*)buffer) + total_received,
+//         target_len - total_received, 0);
 
 //         if (received < 0) {
 //             if (errno == EAGAIN || errno == EWOULDBLOCK) {
@@ -117,9 +117,9 @@ int async_receive_data_partial(int* fd, unsigned char* output, size_t total_size
 //         total_received += received;
 //     }
 
-//     return total_received - already_received; // On retourne le nombre de nouveaux octets lus
+//     return total_received - already_received; // On retourne le nombre de
+//     nouveaux octets lus
 // }
-
 
 // Receive Data
 // unsigned char* async_receive_data(int* fd, int len)
@@ -144,12 +144,11 @@ int async_receive_data_partial(int* fd, unsigned char* output, size_t total_size
 //         exit(EXIT_FAILURE); // ou une autre gestion d’erreur
 //     }
 
-
 //     int total_received = 0;
 //     while(total_received < len)
 //     {
-//         int received = recv(*fd, data + total_received, len - total_received, 0);
-//         if(received < 0)
+//         int received = recv(*fd, data + total_received, len - total_received,
+//         0); if(received < 0)
 //         {
 //             if (errno == EAGAIN || errno == EWOULDBLOCK)
 //                 break; // On a lu tout ce qui était dispo
@@ -169,28 +168,21 @@ int async_receive_data_partial(int* fd, unsigned char* output, size_t total_size
 //     return data;
 // }
 
-unsigned char* ReceiveData(int* fd, int len)
-{
-    unsigned char* data = (unsigned char*)malloc(len);
-    if(!data)
-    {
-        perror("Error while allocating memory for receiving");
-    }
+unsigned char *ReceiveData(int *fd, int len) {
+  unsigned char *data = (unsigned char *)malloc(len);
+  if (!data) {
+    perror("Error while allocating memory for receiving");
+  }
 
-    int total_received = 0;
-    while(total_received < len)
-    {
-        int received = recv(*fd, data + total_received, len - total_received, 0);
-        if(received <= 0)
-        {
-            perror("Error while recepting data");
-            return NULL;
-        }
-        total_received += received;
+  int total_received = 0;
+  while (total_received < len) {
+    int received = recv(*fd, data + total_received, len - total_received, 0);
+    if (received <= 0) {
+      perror("Error while recepting data");
+      return NULL;
     }
+    total_received += received;
+  }
 
-    return data;
+  return data;
 }
-
-
-

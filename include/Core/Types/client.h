@@ -1,10 +1,12 @@
 #ifndef CLIENT_H
 #define CLIENT_H
 
-#include <signal.h>
 #include "client_ctx.h"
 #include "list.h"
 #include <netinet/in.h>
+#include <signal.h>
+
+#define CANNOT_CONNECT_ERR 0
 
 typedef struct {
   int fd;
@@ -19,6 +21,6 @@ typedef struct {
 } Client;
 
 Client *client_from_fd(int fd, List *client_list);
-void runClient(void* args);
+int runClient(const char *ip, int port);
 
 #endif

@@ -5,7 +5,8 @@
 #include <stdbool.h>
 
 extern volatile bool client_killswitch;
-
+#include "client_globals.h"
+#include "client_prompt.h"
 #include "struct_transfer.h"
 #include "client_transfer.h"
 #include <stdarg.h>

@@ -1,22 +1,9 @@
-#include "client.h"
+#include "client_handler.h"
 
+int main(void) {
+  //	startMonoNetClient();
 
-void DisplayMainMenu()
-{
-    Menu_Template* menu = CreateMenuTemplate(4);
-    //AddMenuAction(menu, "Host Server", CreateServer);
-    AddMenuAction(menu, "Connect Client", runClient);
-    AddMenuAction(menu, "Exit", Quit);
+  program_handler();
 
-    DisplayMenu(menu);
-
-    menu_free(menu);
-}
-
-int main(void)
-{
-
-	DisplayMainMenu();
-
-	return 0;
+  return 0;
 }

@@ -4,7 +4,6 @@
 int                 server_fd;              // Server file descriptor
 struct sockaddr_in  server_addr;            // Server address  
 #define MAX_CLIENTS 3
-#define SERVER_PORT 8080
 
 // Secondary Server Variables
 struct Queue*       messages_queue;               // Store all sended messages 
@@ -33,7 +32,7 @@ socklen_t           addr_size;                          // Address size
 volatile bool app_killswitch = false;
 
 //* Main Server Method
-void runServer(void* args)
+void runServer(int port)
 {
     signal(SIGINT, handle_server_closing);
 
@@ -43,16 +42,16 @@ void runServer(void* args)
     // Initialisation du tableau de clients
     clients = createList();
 
-    server_InitSignals(&server_fd, args, clients, &epfd,&pause_th_rc, &pause_th_bm, &pause_th_rfc);
+    //server_InitSignals(&server_fd, args, clients, &epfd,&pause_th_rc, &pause_th_bm, &pause_th_rfc);
 
     log_server(INFO, "Creating Server\n");
 
-    InitServerSocket(&server_fd, &server_addr, SERVER_PORT, MAX_CLIENTS);
+    InitServerSocket(&server_fd, &server_addr, port, MAX_CLIENTS);
 
     InitEpoll(&epfd, server_fd);
 
     // Affiche des infos serveur
-    DisplayServerInfos(&server_addr, SERVER_PORT);
+    DisplayServerInfos(&server_addr, port);
 
     T_StartRegisterClient       (&RegisterClientTh,         RegisterClient, &server_fd, clients, &epfd, messages_queue, &pause_th_rc);
     T_StartReceivingFromClients (&ReceivingFromClientsTh,   ReceivingFromClients, &server_fd, clients, &epfd, events, messages_queue, &pause_th_rfc);

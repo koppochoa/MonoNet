@@ -34,6 +34,7 @@ void* ReceiveBroadcast(void* args)
     Header header       = {0x0};
     Metadata metadata   = {0x0};
     Packet new_packet   = {0x0};
+    
     Message message     = {0x0};
 
     //* Reception

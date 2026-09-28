@@ -14,7 +14,7 @@
 
 #include "server_threads.h"
 
-void runServer(void* args);
+void runServer(int port);
 
 void* ClientManager(void* index);
 
