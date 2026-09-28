@@ -1,4 +1,7 @@
-#include "network.h"
+#include "comm_utils.h"
+
+#include <fcntl.h>
+#include <stdio.h>
 
 void make_non_blocking(int* fd)
 {

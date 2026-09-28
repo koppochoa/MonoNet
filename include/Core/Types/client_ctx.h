@@ -1,13 +1,12 @@
-#ifndef CLIENT_CTX_H
-#define CLIENT_CTX_H
+#pragma once
 
 #include "list.h"
-#include "header.h"
 #include "metadata.h"
 #include "packet.h"
 #include <stddef.h>
 #include <stdbool.h>
 #include <openssl/aes.h>
+#include "header.h"
 
 typedef enum { RECV_HEADER, RECV_METADATA, RECV_PACKET } RecvStep;
 
@@ -30,4 +29,3 @@ void            init_client_ctx(ClientContext* ctx);
 ClientContext*  ctx_from_fd(int fd, List* client_list);
 void            reset_client_ctx(ClientContext* ctx);
 
-#endif

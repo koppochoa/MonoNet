@@ -1,6 +1,7 @@
 #include "client_ctx.h"
 
 #include "client.h"
+#include "header.h"
 
 void init_client_ctx(ClientContext* ctx)
 {
